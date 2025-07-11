@@ -11,27 +11,26 @@ class ProductTest extends TestCase
     protected function setUp(): void
     {
         $this->client = new Client([
-            'base_uri' => 'http://localhost:8000',
+            'base_uri' => 'http://localhost/arquivophp/painel-admin/',
             'http_errors' => false
         ]);
 
-
-        $response = $this->client->post('/?url=superadmin-login', [ 
+        $response = $this->client->post('superadmin-login', [
             'json' => [
-                'email' => 'admin@admin.com', 
+                'email' => 'admin@admin.com',
                 'password' => 'admin123'
             ]
         ]);
 
+
         $body = json_decode($response->getBody(), true);
         $this->token = $body['token'] ?? null;
-
         $this->assertNotNull($this->token, "Token de autenticação não foi gerado.");
     }
 
     public function testProductList()
     {
-        $response = $this->client->get('/?url=products&tenant_db=ecommerce_empresa_teste7', [
+        $response = $this->client->get('products?tenant_db=ecommerce_empresa_teste7', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token
             ]
@@ -47,7 +46,7 @@ class ProductTest extends TestCase
 
     public function testProductCreate()
     {
-        $response = $this->client->post('/?url=products&tenant_db=ecommerce_empresa_teste7', [
+        $response = $this->client->post('products?tenant_db=ecommerce_empresa_teste7', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token
             ],
